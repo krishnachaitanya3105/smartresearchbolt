@@ -1,29 +1,40 @@
 'use client';
 
 import { useState } from 'react';
+import { signIn, getSession } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
 import { ArrowLeft, Mail, Lock, Eye, EyeOff } from 'lucide-react';
-import { toast } from 'sonner';
+import { toast } from 'react-hot-toast';
 
 export default function SignIn() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
     
     try {
-      // Mock authentication - in real app this would authenticate with backend
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      toast.success('Successfully signed in!');
-      window.location.href = '/dashboard';
+      const result = await signIn('credentials', {
+        email,
+        password,
+        redirect: false,
+      });
+
+      if (result?.error) {
+        toast.error('Invalid email or password');
+      } else {
+        toast.success('Successfully signed in!');
+        router.push('/dashboard');
+      }
     } catch (error) {
       toast.error('Invalid email or password');
     } finally {
@@ -34,10 +45,17 @@ export default function SignIn() {
   const handleGoogleSignIn = async () => {
     setIsLoading(true);
     try {
-      // Mock Google OAuth - in real app this would use Google OAuth
-      await new Promise(resolve => setTimeout(resolve, 1500));
-      toast.success('Successfully signed in with Google!');
-      window.location.href = '/dashboard';
+      const result = await signIn('google', {
+        redirect: false,
+        callbackUrl: '/dashboard',
+      });
+
+      if (result?.error) {
+        toast.error('Failed to sign in with Google');
+      } else {
+        toast.success('Successfully signed in with Google!');
+        router.push('/dashboard');
+      }
     } catch (error) {
       toast.error('Failed to sign in with Google');
     } finally {

@@ -9,16 +9,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { 
-  Users, 
-  FileText, 
-  CreditCard, 
-  TrendingUp,
-  Search,
-  MoreHorizontal,
-  Shield,
-  Activity
-} from 'lucide-react';
+import { Users, FileText, CreditCard, TrendingUp, Search, MoveHorizontal as MoreHorizontal, Shield, Activity } from 'lucide-react';
 import {
   DropdownMenu,
   DropdownMenuContent,
